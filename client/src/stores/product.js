@@ -25,5 +25,22 @@ export const useProductStore = defineStore('product', {
           this.errorHandlingAlert(err.response.data.message)
         })
     },
+    registerHandle({email, password, phoneNumber}) {
+      axios({
+        method: 'post',
+        url: this.baseUrl + '/customers/register',
+        data: {
+          email,
+          password,
+          phoneNumber,
+        }
+      })
+        .then((res) => {
+          this.loginHandle({ email, password })
+        })
+        .catch((err) => {
+          this.errorHandlingAlert(err.response.data.message)
+        })
+    },
   },
 })

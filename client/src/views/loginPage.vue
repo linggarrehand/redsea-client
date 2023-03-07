@@ -46,7 +46,7 @@ export default {
                           src="../assets/RedSea_Final.svg"
                           width="50"
                           class="d-inline-block me-4"
-                          alt="UNIQLO"
+                          alt="RedSea"
                         />
                         <!-- <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i> -->
                       </div>
