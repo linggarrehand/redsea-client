@@ -3,11 +3,19 @@ import { mapActions, mapState } from 'pinia';
 import { useProductStore } from '../stores/product';
 export default {
     name: "detailPage",
+    data () {
+    return {
+      amount: ''
+    }
+  },
     computed: {
     ...mapState(useProductStore, ['product'])
   },
   methods: {
-    ...mapActions(useProductStore, ['fetchDetail', 'addExports'])
+    ...mapActions(useProductStore, ['fetchDetail', 'addExports', 'changeCurrency']),
+    submitHandle () {
+      this.changeCurrency(this.amount)
+    }
   },
   created () {
     this.fetchDetail(this.$route.params.id)
@@ -39,6 +47,21 @@ export default {
           </p>
           <p class="lead"> Requested: {{ product.requested }} Kg
           </p>
+          <form @submit.prevent="submitHandle">
+            <div class="form-floating mb-4">
+              <input
+                type="number"
+                class="form-control"
+                id="floatingAmount"
+                placeholder="amount"
+                v-model="amount"
+              />
+              <label>Input USD currency</label>
+            </div>
+            <div class="pt-1 mb-4">
+              <button class="btn btn-dark btn-sm btn-block" type="submit">Convert to IDR</button>
+            </div>
+          </form>
           <div class="d-flex">
             <button class="btn btn-outline-dark" type="button" >
               <a class="material-symbols-outlined" @click.prevent="addExports(product.id)"> local_shipping </a>

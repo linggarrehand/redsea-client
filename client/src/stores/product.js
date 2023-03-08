@@ -31,6 +31,9 @@ export const useProductStore = defineStore('product', {
         timer: 1500
       })
     },
+    currencySuccessAlert (params) {
+      Swal.fire(params)
+    },
     loginHandle({ email, password }) {
       axios({
         method: 'post',
@@ -178,6 +181,21 @@ export const useProductStore = defineStore('product', {
             this.errorHandlingAlert(err.response.data.message)
           })
       }
+    },
+    changeCurrency(amount) {
+      axios({
+        method: 'get',
+        url: this.baseUrl + `/customers/currency`,
+        headers: {
+          amount
+        }
+      })
+        .then((res) => {
+          this.currencySuccessAlert(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(res.data.amount))
+        })
+        .catch((err) => {
+          this.errorHandlingAlert(err.response.data.message)
+        })
     },
   },
 })
