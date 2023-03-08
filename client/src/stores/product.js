@@ -6,7 +6,8 @@ export const useProductStore = defineStore('product', {
   state: () => ({ 
     baseUrl: 'http://localhost:3000',
     products: [],
-    product: {}
+    product: {},
+    exportProducts: []
 
   }),
   getters: {},
@@ -97,6 +98,21 @@ export const useProductStore = defineStore('product', {
         })
         .catch((err) => {
           this.errorHandlingAlert("You must login first")
+        })
+    },
+    fetchExports() {
+      axios({
+        method: 'get',
+        url: this.baseUrl + '/exports',
+        headers: {
+          access_token: localStorage.getItem('access_token')
+        }
+      })
+        .then((res) => {
+          this.exportProducts = res.data
+        })
+        .catch((err) => {
+          this.errorHandlingAlert(err.response.data.message)
         })
     },
   },

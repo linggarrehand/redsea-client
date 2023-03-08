@@ -35,9 +35,9 @@ export default {
           <i class="bi bi-bag-plus"></i>
           <p class="lead"> Open Price:  {{ 
           product.price
-          }} $ / 500 Grams
+          }} USD / 500 G
           </p>
-          <p class="lead"> Requested: {{ product.requested }} KG
+          <p class="lead"> Requested: {{ product.requested }} Kg
           </p>
           <div class="d-flex">
             <button class="btn btn-outline-dark" type="button" >
