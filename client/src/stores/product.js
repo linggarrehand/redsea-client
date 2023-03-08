@@ -11,6 +11,8 @@ export const useProductStore = defineStore('product', {
     categories: [], 
     page: '',
     isLogin: false,
+    userEmail: '',
+    userSubscription: ''
 
   }),
   getters: {},
@@ -46,11 +48,28 @@ export const useProductStore = defineStore('product', {
         .then((res) => {
           localStorage.setItem('access_token', res.data.access_token)
           this.isLogin = true
+          this.currentCustomer(res.data.access_token)
           this.router.push('/home')
         })
         .catch((err) => {
           this.errorHandlingAlert(err.response.data.message)
         })
+    },
+    currentCustomer (access_token) {
+      axios({
+        method: 'get',
+        url: this.baseUrl + '/customers/details',
+        headers: {
+          access_token
+        }
+      })
+      .then((res) => {
+        this.userEmail = res.data.email
+        this.userSubscription = res.data.subscribe
+      })
+      .catch((err) => {
+        this.errorHandlingAlert(err.response.data.message)
+      })
     },
     registerHandle({email, password, phoneNumber}) {
       axios({
@@ -85,7 +104,6 @@ export const useProductStore = defineStore('product', {
         url: this.baseUrl + `/customers/products/${id}`,
       })
         .then((res) => {
-          console.log (res)
           this.product = res.data
         })
         .catch((err) => {
@@ -191,11 +209,44 @@ export const useProductStore = defineStore('product', {
         }
       })
         .then((res) => {
-          this.currencySuccessAlert(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(res.data.amount))
+          this.currencySuccessAlert(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(res.data.result))
         })
         .catch((err) => {
           this.errorHandlingAlert(err.response.data.message)
         })
     },
+    subscribe () {
+      axios({
+        method: 'post',
+        url: this.baseUrl + `/customers/generate-midtrans-token`,
+        headers: {
+          access_token: localStorage.getItem('access_token')
+        }
+      }).then((res) => {
+
+        const cb = this.subscribeSuccess
+
+        window.snap.pay(res.data.token, {
+          onSuccess: function(result){
+            cb ()
+          },
+        })
+      }).catch((err) => {
+        this.errorHandlingAlert(err.response.data.message)
+      });
+    },
+    subscribeSuccess () {
+      axios({
+        method: 'patch',
+        url: this.baseUrl + `/customers/subscription`,
+        headers: {
+          access_token: localStorage.getItem('access_token')
+        }
+      }).then((res) => {
+        this.userSubscription = true
+      }).catch((err) => {
+        this.errorHandlingAlert(err.response.data.message)
+      });
+    }
   },
 })
