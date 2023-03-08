@@ -1,6 +1,26 @@
 <script>
+import { mapActions, mapState, mapWritableState } from 'pinia'
+import { useProductStore } from '../stores/product'
 export default {
   name: 'customNavbar',
+  methods: {
+    ...mapActions(useProductStore, [
+      'logoutHandle',
+      'fetchCategory',
+      'fetchProducts',
+      'fetchProductsByCategory',
+    ])
+  },
+  computed: {
+    ...mapState(useProductStore, ['categories']),
+    ...mapWritableState(useProductStore, ['isLogin'])
+  },
+  created() {
+    this.fetchCategory()
+    if (localStorage.access_token) {
+      this.isLogin = true
+    }
+  }
 }
 </script>
 
@@ -35,15 +55,15 @@ export default {
             <router-link class="nav-link" to="/home">Home</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/export" >My Export List</router-link>
+            <router-link class="nav-link" to="/export" v-if="isLogin" >My Export List</router-link>
           </li>
         </ul>
 
         <!-- Left links -->
         <!-- Change It -->
-        <!-- <div class="dropdown">
+        <div class="dropdown">
           <button
-            class="btn btn-outline-secondary dropdown-toggle"
+            class="btn btn-outline-secondary dropdown-toggle mr-5"
             type="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
@@ -63,23 +83,25 @@ export default {
               >
             </li>
           </ul>
-        </div> -->
+        </div>
 
         <div class="d-flex align-items-center">
-          <router-link type="button" class="btn btn-link px-3 me-2" to="/login" >Login</router-link>
+          <router-link type="button" class="btn btn-link px-3 me-2 ms-2" to="/login" v-if="!isLogin" >Login</router-link>
           <router-link
             type="button"
             class="btn btn-link btn-outline-primary px-3 me-2"
             data-mdb-ripple-color="dark"
             to="/register"
-            
+            v-if="!isLogin"
             >Sign Up</router-link
           >
           <router-link
             type="button"
-            class="btn btn-outline-danger"
+            class="btn btn-outline-danger ms-2"
             data-mdb-ripple-color="dark"
+            @click.prevent="logoutHandle"
             to="/home"
+            v-if="isLogin"
             >Logout</router-link
           >
         </div>

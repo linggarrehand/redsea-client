@@ -7,7 +7,10 @@ export const useProductStore = defineStore('product', {
     baseUrl: 'http://localhost:3000',
     products: [],
     product: {},
-    exportProducts: []
+    exportProducts: [],
+    categories: [], 
+    page: '',
+    isLogin: false,
 
   }),
   getters: {},
@@ -39,6 +42,7 @@ export const useProductStore = defineStore('product', {
       })
         .then((res) => {
           localStorage.setItem('access_token', res.data.access_token)
+          this.isLogin = true
           this.router.push('/home')
         })
         .catch((err) => {
@@ -114,6 +118,66 @@ export const useProductStore = defineStore('product', {
         .catch((err) => {
           this.errorHandlingAlert(err.response.data.message)
         })
+    },
+    logoutHandle() {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'You will be logged out',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          localStorage.clear()
+          this.isLogin = false
+          this.router.push('/home')
+          Swal.fire('Success!', 'You already logged out', 'success')
+        }
+      })
+    },
+    fetchCategory() {
+      axios({
+        method: 'get',
+        url: this.baseUrl + '/customers/categories'
+      })
+        .then((res) => {
+          this.categories = res.data
+        })
+        .catch((err) => {
+          this.errorHandlingAlert(err.response.data.message)
+        })
+    },
+    fetchProductsByCategory(id) {
+      axios({
+        method: 'get',
+        url: this.baseUrl + `/customers/products?categoryId=${id}`
+      })
+        .then((res) => {
+          this.page = 0
+          this.products = res.data
+        })
+        .catch((err) => {
+          this.errorHandlingAlert(err.response.data.message)
+        })
+    },
+    fetchProductsByPage(pageNumber) {
+      if (pageNumber < 0 || pageNumber > 1) {
+        this.errorHandlingAlert('Page not found')
+      } else {
+        axios({
+          method: 'get',
+          url: this.baseUrl + `/customers/products?page=${pageNumber}`
+        })
+          .then((res) => {
+            this.page = pageNumber
+            this.products = res.data
+          })
+          .catch((err) => {
+            this.errorHandlingAlert(err.response.data.message)
+          })
+      }
     },
   },
 })

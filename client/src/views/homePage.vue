@@ -1,11 +1,13 @@
 <script>
 import productCard from '../components/productCard.vue'
+import customPagination from '../components/customPagination.vue'
 import { mapActions, mapState } from 'pinia'
 import { useProductStore } from '../stores/product'
 export default {
   name: 'homePage',
   components: {
-    productCard
+    productCard,
+    customPagination
   },
   methods: {
     ...mapActions(useProductStore, ['fetchProducts'])
@@ -27,4 +29,7 @@ export default {
       </div>
     </div>
   </section>
+  <div class="d-flex justify-content-center">
+    <customPagination/>
+  </div>
 </template>
