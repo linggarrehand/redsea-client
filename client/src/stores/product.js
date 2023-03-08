@@ -4,6 +4,7 @@ import axios from 'axios'
 export const useProductStore = defineStore('product', {
   state: () => ({ 
     baseUrl: 'http://localhost:3000',
+    products: [],
 
   }),
   getters: {},
@@ -37,6 +38,16 @@ export const useProductStore = defineStore('product', {
       })
         .then((res) => {
           this.loginHandle({ email, password })
+        })
+        .catch((err) => {
+          this.errorHandlingAlert(err.response.data.message)
+        })
+    },
+    fetchProducts() {
+      axios
+        .get(this.baseUrl + '/customers/products')
+        .then((res) => {
+          this.products = res.data
         })
         .catch((err) => {
           this.errorHandlingAlert(err.response.data.message)
