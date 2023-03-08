@@ -50,7 +50,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if ((to.name === 'login' || to.name === 'register') && localStorage.access_token) {
     next({ name: 'home' })
-  } else if (to.name === 'bookmark' && !localStorage.access_token) {
+  } else if (to.name === 'export' && !localStorage.access_token) {
     next({ name: 'home' })
   } else {
     next()
