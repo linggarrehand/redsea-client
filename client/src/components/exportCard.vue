@@ -7,7 +7,7 @@ export default {
 
 <template>
       <div class="col-md-8 col-lg-6 col-xl-4 mb-5">
-        <div class="card text-black">
+        <div class="card text-black w-100 h-100">
           <img :src="exportProduct.Product.imgUrl"
             class="card-img-top" alt="RedSea" />
           <div class="card-body">

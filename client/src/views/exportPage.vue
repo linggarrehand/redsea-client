@@ -1,4 +1,5 @@
 <script>
+
 import exportCard from '../components/exportCard.vue'
 import { mapActions, mapState } from 'pinia'
 import { useProductStore } from '../stores/product'

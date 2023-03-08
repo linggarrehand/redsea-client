@@ -1,10 +1,20 @@
 <script>
+import Swal from 'sweetalert2'
+
 export default {
   name: 'productCard',
   props: ['product', 'key'],
   methods: {
     detailHandle() {
-      this.$router.push('/detail/' + this.product.id)
+      if (!localStorage.access_token) {
+        Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: `You have to login first`
+      })
+      } else {
+        this.$router.push('/detail/' + this.product.id)
+      }
     }
   }
 }

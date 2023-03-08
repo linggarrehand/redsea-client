@@ -9,6 +9,7 @@ export default {
       'fetchCategory',
       'fetchProducts',
       'fetchProductsByCategory',
+      'subscribe'
     ])
   },
   computed: {
@@ -86,6 +87,7 @@ export default {
         </div>
 
         <div class="d-flex align-items-center">
+          <button type="button" class="btn btn-primary px-3 me-2 ms-2" @click.prevent="subscribe" v-if="isLogin">Subscribe</button>
           <router-link type="button" class="btn btn-link px-3 me-2 ms-2" to="/login" v-if="!isLogin" >Login</router-link>
           <router-link
             type="button"

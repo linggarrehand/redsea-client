@@ -1,6 +1,7 @@
 <script>
 import { mapActions, mapState } from 'pinia';
 import { useProductStore } from '../stores/product';
+import Swal from 'sweetalert2'
 export default {
     name: "detailPage",
     data () {
@@ -9,12 +10,23 @@ export default {
     }
   },
     computed: {
-    ...mapState(useProductStore, ['product'])
+    ...mapState(useProductStore, ['product', 'userSubscription'])
   },
   methods: {
     ...mapActions(useProductStore, ['fetchDetail', 'addExports', 'changeCurrency']),
-    submitHandle () {
+    submitHandleCurrency () {
       this.changeCurrency(this.amount)
+    },
+    submitHandleExport () {
+      if (!this.userSubscription) {
+        Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: `You have to subscribe first`
+      })
+      } else {
+        this.addExports(this.product.id)
+      }
     }
   },
   created () {
@@ -47,7 +59,7 @@ export default {
           </p>
           <p class="lead"> Requested: {{ product.requested }} Kg
           </p>
-          <form @submit.prevent="submitHandle">
+          <form @submit.prevent="submitHandleCurrency">
             <div class="form-floating mb-4">
               <input
                 type="number"
@@ -64,7 +76,7 @@ export default {
           </form>
           <div class="d-flex">
             <button class="btn btn-outline-dark" type="button" >
-              <a class="material-symbols-outlined" @click.prevent="addExports(product.id)"> local_shipping </a>
+              <a class="material-symbols-outlined" @click.prevent="submitHandleExport"> local_shipping </a>
             </button>
           </div>
         </div>
