@@ -21,7 +21,7 @@ export default {
 </script>
 
 <template>
-  <section style="background-color: #eee">
+  <section>
     <div class="container py-5">
       <div class="row justify-content-evenly">
         <exportCard v-for=" exportProduct in exportProducts" :key="exportProduct.id" :exportProduct="exportProduct"/>

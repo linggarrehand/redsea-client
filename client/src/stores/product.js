@@ -4,7 +4,8 @@ import Swal from 'sweetalert2'
 
 export const useProductStore = defineStore('product', {
   state: () => ({ 
-    baseUrl: 'http://localhost:3000',
+    baseUrl: 'https://redsea-production.up.railway.app',
+    // baseUrl: 'http://localhost:3000',
     products: [],
     product: {},
     exportProducts: [],

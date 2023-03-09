@@ -22,7 +22,7 @@ export default {
 </script>
 
 <template>
-  <section style="background-color: #eee">
+  <section>
     <div class="container py-5">
       <div class="row">
         <productCard v-for="product in products" :key="product.id" :product="product" />
